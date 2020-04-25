@@ -1,14 +1,5 @@
 // import * as fileSystem from 'fs';
-import {
-  compose,
-  last,
-  take,
-  takeLast,
-  split,
-  map,
-  join,
-  flatten,
-} from 'ramda';
+import { compose, take, takeLast, split, map, join } from 'ramda';
 
 export const getAsciiValue = (character: string): number => {
   return character.charCodeAt(0);
