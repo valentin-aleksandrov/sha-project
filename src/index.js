@@ -54,7 +54,9 @@ exports.separateBlockByWords = function (block) {
     ], exports.separateBlockByWords(ramda_1.takeLast(block.length - 64, block)));
 };
 exports.getWords = function (blocks) {
-    return blocks.map(exports.separateBlockByWords);
+    return blocks
+        .map(exports.separateBlockByWords)
+        .map(function (block) { return block.map(function (binary) { return parseInt(binary, 2); }); });
 };
 exports.preprocessInput = ramda_1.compose(exports.getWords, exports.getBlocks, exports.padMessage, exports.convertInputToBits);
 exports.application = function () {
@@ -70,5 +72,8 @@ exports.application = function () {
     //     'utf8',
     //   );
     //   console.log('text from the file', dataFromFile);
-    console.log(exports.preprocessInput('abcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
+    var input = 'abc';
+    //   const input =
+    //     'abcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+    console.log(exports.preprocessInput(input));
 };
