@@ -1,0 +1,8 @@
+Some data:
+hex digit -> 4-bit string Example: "7" -> "0111" "a" -> "1010"
+SHA-512 operate on 64-bit words (w=64).
+
+PREPROCESSING
+Preprocessing consists of three steps: padding the message, M (Sec. 5.1), parsing the message
+into message blocks (Sec. 5.2), and setting the initial hash value, H
+(0) (Sec. 5.3). 
