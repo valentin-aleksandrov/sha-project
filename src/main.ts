@@ -1,3 +1,4 @@
+import { application } from './index';
 /**
  * Some predefined delays (in milliseconds).
  */
@@ -30,3 +31,5 @@ function delayedHello(
 export async function greeter(name: string) {
   return await delayedHello(name, Delays.Long);
 }
+
+application();
