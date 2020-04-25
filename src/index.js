@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var tslib_1 = require("tslib");
 // import * as fileSystem from 'fs';
 var ramda_1 = require("ramda");
 exports.getAsciiValue = function (character) {
@@ -18,12 +19,7 @@ exports.normalizeToOneHundredTwentyEightBits = function (binaryValue) {
 };
 exports.characterToBinary = ramda_1.compose(exports.normalizeToEightBits, exports.toBinary, exports.getAsciiValue);
 exports.toOneHundredTwentyEightBitsBinary = ramda_1.compose(exports.normalizeToOneHundredTwentyEightBits, exports.toBinary);
-exports.convertWordToBits = function (word) {
-    return word
-        .split('')
-        .map(exports.characterToBinary)
-        .join('');
-};
+exports.convertInputToBits = ramda_1.compose(ramda_1.join(''), ramda_1.map(exports.characterToBinary), ramda_1.split(''));
 exports.zerosCountInMessagePreparing = function (messageLength) {
     return 896 - messageLength - 1;
 };
@@ -41,6 +37,26 @@ exports.padMessage = function (message) {
             exports.toOneHundredTwentyEightBitsBinary(message.length)
         : getMessageModThousandTwentyFour(message, '0', exports.toOneHundredTwentyEightBitsBinary(message.length));
 };
+exports.getBlocks = function (padMessage) {
+    if (padMessage.length === 1024) {
+        return [padMessage];
+    }
+    return tslib_1.__spreadArrays([
+        ramda_1.take(1024, padMessage)
+    ], exports.getBlocks(ramda_1.takeLast(padMessage.length - 1024, padMessage)));
+};
+exports.separateBlockByWords = function (block) {
+    if (block.length === 64) {
+        return [block];
+    }
+    return tslib_1.__spreadArrays([
+        ramda_1.take(64, block)
+    ], exports.separateBlockByWords(ramda_1.takeLast(block.length - 64, block)));
+};
+exports.getWords = function (blocks) {
+    return blocks.map(exports.separateBlockByWords);
+};
+exports.preprocessInput = ramda_1.compose(exports.getWords, exports.getBlocks, exports.padMessage, exports.convertInputToBits);
 exports.application = function () {
     //   const stdin = process.openStdin();
     //   stdin.addListener('data', function(d) {
@@ -54,5 +70,5 @@ exports.application = function () {
     //     'utf8',
     //   );
     //   console.log('text from the file', dataFromFile);
-    console.log(exports.padMessage(exports.convertWordToBits('abc')).length);
+    console.log(exports.preprocessInput('abcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
 };

@@ -1,5 +1,14 @@
 // import * as fileSystem from 'fs';
-import { compose, last } from 'ramda';
+import {
+  compose,
+  last,
+  take,
+  takeLast,
+  split,
+  map,
+  join,
+  flatten,
+} from 'ramda';
 
 export const getAsciiValue = (character: string): number => {
   return character.charCodeAt(0);
@@ -32,12 +41,11 @@ export const toOneHundredTwentyEightBitsBinary = compose(
   toBinary,
 );
 
-export const convertWordToBits = (word: string): string => {
-  return word
-    .split('')
-    .map(characterToBinary)
-    .join('');
-};
+export const convertInputToBits = compose(
+  join(''),
+  map(characterToBinary),
+  split(''),
+);
 
 export const zerosCountInMessagePreparing = (messageLength: number): number => {
   return 896 - messageLength - 1;
@@ -67,6 +75,37 @@ export const padMessage = (message: string): string => {
       );
 };
 
+export const getBlocks = (padMessage: string): string[] => {
+  if (padMessage.length === 1024) {
+    return [padMessage];
+  }
+  return [
+    take(1024, padMessage),
+    ...getBlocks(takeLast(padMessage.length - 1024, padMessage)),
+  ];
+};
+
+export const separateBlockByWords = (block: string): string[] => {
+  if (block.length === 64) {
+    return [block];
+  }
+  return [
+    take(64, block),
+    ...separateBlockByWords(takeLast(block.length - 64, block)),
+  ];
+};
+
+export const getWords = (blocks: string[]): string[][] => {
+  return blocks.map(separateBlockByWords);
+};
+
+export const preprocessInput = compose(
+  getWords,
+  getBlocks,
+  padMessage,
+  convertInputToBits,
+);
+
 export const application = (): void => {
   //   const stdin = process.openStdin();
   //   stdin.addListener('data', function(d) {
@@ -81,5 +120,9 @@ export const application = (): void => {
   //   );
   //   console.log('text from the file', dataFromFile);
 
-  console.log(padMessage(convertWordToBits('abc')).length);
+  console.log(
+    preprocessInput(
+      'abcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    ),
+  );
 };
