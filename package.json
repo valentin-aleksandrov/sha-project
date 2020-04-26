@@ -27,12 +27,13 @@
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "start": "tsc --importHelpers src/main.ts && node src/main.js"
+    "start": "tsc --importHelpers --esModuleInterop src/main.ts && node src/main.js"
   },
   "author": "Jakub Synowiec <github@jakubsynowiec.info>",
   "license": "Apache-2.0",
   "dependencies": {
     "@types/ramda": "^0.27.4",
+    "big-integer": "^1.6.48",
     "ramda": "^0.27.0",
     "tslib": "~1.10.0"
   }
