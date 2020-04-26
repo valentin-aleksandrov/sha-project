@@ -178,7 +178,7 @@ exports.getWords = function (blocks) {
         .map(function (block) { return block.map(function (binary) { return big_integer_1["default"](binary, 2); }); });
 };
 exports.preprocessInput = ramda_1.compose(exports.getWords, exports.getBlocks, exports.padMessage, exports.convertInputToBits);
-var dec2hex = function (str) {
+exports.dec2hex = function (str) {
     var dec = str.toString().split('');
     var sum = [];
     var hex = [];
@@ -244,6 +244,6 @@ exports.hash = function (input) {
     }
     return buffer
         .map(function (bigInteger) { return bigInteger.toString(); })
-        .map(function (str) { return dec2hex(str); })
+        .map(function (str) { return exports.dec2hex(str); })
         .join('');
 };

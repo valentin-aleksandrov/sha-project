@@ -235,7 +235,7 @@ export const preprocessInput = compose(
   convertInputToBits,
 );
 
-const dec2hex = (str: string): string => {
+export const dec2hex = (str: string): string => {
   const dec = str.toString().split('');
   const sum = [];
   const hex = [];

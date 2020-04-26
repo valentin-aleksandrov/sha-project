@@ -3,6 +3,8 @@ import { hash } from './algorithm';
 
 export class FkstHashFile {
   public hash = (filePath: string): string => {
-    return hash(fileSystem.readFileSync(filePath, 'utf8'));
+    const data = fileSystem.readFileSync(filePath, 'utf8').trim();
+    console.log(data);
+    return hash(data);
   };
 }

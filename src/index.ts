@@ -1,6 +1,7 @@
-import { FkstHashString } from './FKSTHashString';
 // import { FkstHashConsole } from './FkstHashConsole';
 // import { FkstHashFile } from './FkstHashFile';
+
+import { FkstHashString } from './FkstHashString';
 
 export const application = (): void => {
   const input = 'honda';
